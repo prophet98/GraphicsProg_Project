@@ -14,48 +14,48 @@ using Microsoft::WRL::ComPtr;
 
 Game::Game() noexcept(false)
 {
-    m_deviceResources = std::make_unique<DX::DeviceResources>();
-    m_deviceResources->RegisterDeviceNotify(this);
+	m_deviceResources = std::make_unique<DX::DeviceResources>();
+	m_deviceResources->RegisterDeviceNotify(this);
 }
 
 // Initialize the Direct3D resources required to run.
 void Game::Initialize(HWND window, int width, int height)
 {
-    m_deviceResources->SetWindow(window, width, height);
+	m_deviceResources->SetWindow(window, width, height);
 
-    m_deviceResources->CreateDeviceResources();
-    CreateDeviceDependentResources();
+	m_deviceResources->CreateDeviceResources();
+	CreateDeviceDependentResources();
 
-    m_deviceResources->CreateWindowSizeDependentResources();
-    CreateWindowSizeDependentResources();
+	m_deviceResources->CreateWindowSizeDependentResources();
+	CreateWindowSizeDependentResources();
 
-    // TODO: Change the timer settings if you want something other than the default variable timestep mode.
-    // e.g. for 60 FPS fixed timestep update logic, call:
-    /*
-    m_timer.SetFixedTimeStep(true);
-    m_timer.SetTargetElapsedSeconds(1.0 / 60);
-    */
+	// TODO: Change the timer settings if you want something other than the default variable timestep mode.
+	// e.g. for 60 FPS fixed timestep update logic, call:
+	/*
+	m_timer.SetFixedTimeStep(true);
+	m_timer.SetTargetElapsedSeconds(1.0 / 60);
+	*/
 }
 
 #pragma region Frame Update
 // Executes the basic game loop.
 void Game::Tick()
 {
-    m_timer.Tick([&]()
-    {
-        Update(m_timer);
-    });
+	m_timer.Tick([&]()
+		{
+			Update(m_timer);
+		});
 
-    Render();
+	Render();
 }
 
 // Updates the world.
 void Game::Update(DX::StepTimer const& timer)
 {
-    float elapsedTime = float(timer.GetElapsedSeconds());
+	float elapsedTime = float(timer.GetElapsedSeconds());
 
-    // TODO: Add your game logic here.
-    elapsedTime;
+	// TODO: Add your game logic here.
+	elapsedTime;
 }
 #pragma endregion
 
@@ -63,51 +63,63 @@ void Game::Update(DX::StepTimer const& timer)
 // Draws the scene.
 void Game::Render()
 {
-    // Don't try to render anything before the first Update.
-    if (m_timer.GetFrameCount() == 0)
-    {
-        return;
-    }
+	// Don't try to render anything before the first Update.
+	if (m_timer.GetFrameCount() == 0)
+	{
+		return;
+	}
 
-    Clear();
+	Clear();
 
-    m_deviceResources->PIXBeginEvent(L"Render");
-    auto context = m_deviceResources->GetD3DDeviceContext();
+	m_deviceResources->PIXBeginEvent(L"Render");
+	auto context = m_deviceResources->GetD3DDeviceContext();
 
-    // TODO: Add your rendering code here.
+	// TODO: Add your rendering code here.
+	float time = float(m_timer.GetTotalSeconds());
+
 	m_spriteBatch->Begin();
+
+	const wchar_t* output = L"Hello World";
+
+	m_spriteBatch->Draw(m_background.Get(), m_fullscreenRect);
 
 	m_spriteBatch->Draw(m_texture.Get(), m_screenPos, nullptr,
 		Colors::White, 0.f, m_origin);
 
+	Vector2 origin = m_font->MeasureString(output) / 2.f;
+
+	m_font->DrawString(m_spriteBatch.get(), output,
+		m_fontPos, Colors::White, 0.f, origin);
+
 	m_spriteBatch->End();
-    context;
 
-    m_deviceResources->PIXEndEvent();
+	context;
 
-    // Show the new frame.
-    m_deviceResources->Present();
+	m_deviceResources->PIXEndEvent();
+
+	// Show the new frame.
+	m_deviceResources->Present();
 }
 
 // Helper method to clear the back buffers.
 void Game::Clear()
 {
-    m_deviceResources->PIXBeginEvent(L"Clear");
+	m_deviceResources->PIXBeginEvent(L"Clear");
 
-    // Clear the views.
-    auto context = m_deviceResources->GetD3DDeviceContext();
-    auto renderTarget = m_deviceResources->GetRenderTargetView();
-    auto depthStencil = m_deviceResources->GetDepthStencilView();
+	// Clear the views.
+	auto context = m_deviceResources->GetD3DDeviceContext();
+	auto renderTarget = m_deviceResources->GetRenderTargetView();
+	auto depthStencil = m_deviceResources->GetDepthStencilView();
 
-    context->ClearRenderTargetView(renderTarget, Colors::CornflowerBlue);
-    context->ClearDepthStencilView(depthStencil, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
-    context->OMSetRenderTargets(1, &renderTarget, depthStencil);
+	context->ClearRenderTargetView(renderTarget, Colors::CornflowerBlue);
+	context->ClearDepthStencilView(depthStencil, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
+	context->OMSetRenderTargets(1, &renderTarget, depthStencil);
 
-    // Set the viewport.
-    auto viewport = m_deviceResources->GetScreenViewport();
-    context->RSSetViewports(1, &viewport);
+	// Set the viewport.
+	auto viewport = m_deviceResources->GetScreenViewport();
+	context->RSSetViewports(1, &viewport);
 
-    m_deviceResources->PIXEndEvent();
+	m_deviceResources->PIXEndEvent();
 }
 #pragma endregion
 
@@ -115,48 +127,48 @@ void Game::Clear()
 // Message handlers
 void Game::OnActivated()
 {
-    // TODO: Game is becoming active window.
+	// TODO: Game is becoming active window.
 }
 
 void Game::OnDeactivated()
 {
-    // TODO: Game is becoming background window.
+	// TODO: Game is becoming background window.
 }
 
 void Game::OnSuspending()
 {
-    // TODO: Game is being power-suspended (or minimized).
+	// TODO: Game is being power-suspended (or minimized).
 }
 
 void Game::OnResuming()
 {
-    m_timer.ResetElapsedTime();
+	m_timer.ResetElapsedTime();
 
-    // TODO: Game is being power-resumed (or returning from minimize).
+	// TODO: Game is being power-resumed (or returning from minimize).
 }
 
 void Game::OnWindowMoved()
 {
-    auto r = m_deviceResources->GetOutputSize();
-    m_deviceResources->WindowSizeChanged(r.right, r.bottom);
+	auto r = m_deviceResources->GetOutputSize();
+	m_deviceResources->WindowSizeChanged(r.right, r.bottom);
 }
 
 void Game::OnWindowSizeChanged(int width, int height)
 {
-    if (!m_deviceResources->WindowSizeChanged(width, height))
-        return;
+	if (!m_deviceResources->WindowSizeChanged(width, height))
+		return;
 
-    CreateWindowSizeDependentResources();
+	CreateWindowSizeDependentResources();
 
-    // TODO: Game window is being resized.
+	// TODO: Game window is being resized.
 }
 
 // Properties
 void Game::GetDefaultSize(int& width, int& height) const noexcept
 {
-    // TODO: Change to desired default window size (note minimum size is 320x200).
-    width = 800;
-    height = 600;
+	// TODO: Change to desired default window size (note minimum size is 320x200).
+	width = 800;
+	height = 600;
 }
 #pragma endregion
 
@@ -164,15 +176,19 @@ void Game::GetDefaultSize(int& width, int& height) const noexcept
 // These are the resources that depend on the device.
 void Game::CreateDeviceDependentResources()
 {
-    auto device = m_deviceResources->GetD3DDevice();
+	auto device = m_deviceResources->GetD3DDevice();
 	auto context = m_deviceResources->GetD3DDeviceContext();
 	m_spriteBatch = std::make_unique<SpriteBatch>(context);
 
 	ComPtr<ID3D11Resource> resource;
-    // TODO: Initialize device dependent objects here (independent of window size).
+	// TODO: Initialize device dependent objects here (independent of window size).
 	DX::ThrowIfFailed(
 		CreateWICTextureFromFile(device, L"Title.png", resource.GetAddressOf(),
 			m_texture.ReleaseAndGetAddressOf()));
+	DX::ThrowIfFailed(
+		CreateWICTextureFromFile(device, L"Background.png", nullptr,
+			m_background.ReleaseAndGetAddressOf()));
+	m_states = std::make_unique<CommonStates>(device);
 	ComPtr<ID3D11Texture2D> title;
 	DX::ThrowIfFailed(resource.As(&title));
 
@@ -182,29 +198,54 @@ void Game::CreateDeviceDependentResources()
 	m_origin.x = float(titleDesc.Width / 2);
 	m_origin.y = float(titleDesc.Height / 2);
 
-    device;
+	m_tileRect.left = titleDesc.Width * 2;
+	m_tileRect.right = titleDesc.Width * 6;
+	m_tileRect.top = titleDesc.Height * 2;
+	m_tileRect.bottom = titleDesc.Height * 6;
+
+	m_font = std::make_unique<SpriteFont>(device, L"myfile.spritefont");
+
+	//auto context = m_deviceResources->GetD3DDeviceContext();
+	m_spriteBatch = std::make_unique<SpriteBatch>(context);
+
+	device;
 }
 
 // Allocate all memory resources that change on a window SizeChanged event.
 void Game::CreateWindowSizeDependentResources()
 {
-    // TODO: Initialize windows-size dependent objects here.
+	// TODO: Initialize windows-size dependent objects here.
 	auto size = m_deviceResources->GetOutputSize();
 	m_screenPos.x = float(size.right) / 2.f;
 	m_screenPos.y = float(size.bottom) / 2.f;
+
+	m_stretchRect.left = size.right / 4;
+	m_stretchRect.top = size.bottom / 4;
+	m_stretchRect.right = m_stretchRect.left + size.right / 2;
+	m_stretchRect.bottom = m_stretchRect.top + size.bottom / 2;
+
+	m_fullscreenRect = m_deviceResources->GetOutputSize();
+
+	m_fontPos.x = float(size.right) / 2.f;
+	m_fontPos.y = float(size.bottom) / 2.f;
 }
 
 void Game::OnDeviceLost()
 {
-    // TODO: Add Direct3D resource cleanup here.
-    m_texture.Reset();
-    m_spriteBatch.reset();
+	// TODO: Add Direct3D resource cleanup here.
+	//m_texture.Reset();
+	m_spriteBatch.reset();
+	m_states.reset();
+	m_background.Reset();
+	m_font.reset();
+	m_spriteBatch.reset();
+
 }
 
 void Game::OnDeviceRestored()
 {
-    CreateDeviceDependentResources();
+	CreateDeviceDependentResources();
 
-    CreateWindowSizeDependentResources();
+	CreateWindowSizeDependentResources();
 }
 #pragma endregion

@@ -18,6 +18,7 @@
     <ClInclude Include="DeviceResources.h">
       <Filter>Common</Filter>
     </ClInclude>
+    <ClInclude Include="AnimatedTexture.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp" />
@@ -37,6 +38,9 @@
     <Image Include="Title.png">
       <Filter>Assets</Filter>
     </Image>
+    <Image Include="Background.png">
+      <Filter>Assets</Filter>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <Manifest Include="settings.manifest">
@@ -45,5 +49,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+    <None Include="myfile.spritefont" />
   </ItemGroup>
 </Project>
