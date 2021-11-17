@@ -8,6 +8,12 @@
       <UniqueIdentifier>383f61fe-df32-4064-bef5-9ec26278d935</UniqueIdentifier>
       <Extensions>ico;cur;bmp;dds;dlg;fbx;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tga;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Gameobjects">
+      <UniqueIdentifier>{449669b8-57cb-4072-8f29-122b658783db}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tools">
+      <UniqueIdentifier>{1bba0533-0728-4367-bbd5-0e53c84dcba3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
@@ -19,6 +25,15 @@
       <Filter>Common</Filter>
     </ClInclude>
     <ClInclude Include="AnimatedTexture.h" />
+    <ClInclude Include="Ball.h">
+      <Filter>Gameobjects</Filter>
+    </ClInclude>
+    <ClInclude Include="Gameobject.h">
+      <Filter>Gameobjects</Filter>
+    </ClInclude>
+    <ClInclude Include="Vector2.h">
+      <Filter>Tools</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp" />
@@ -26,6 +41,15 @@
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="DeviceResources.cpp">
       <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="Ball.cpp">
+      <Filter>Gameobjects</Filter>
+    </ClCompile>
+    <ClCompile Include="Gameobject.cpp">
+      <Filter>Gameobjects</Filter>
+    </ClCompile>
+    <ClCompile Include="Vector2.cpp">
+      <Filter>Tools</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

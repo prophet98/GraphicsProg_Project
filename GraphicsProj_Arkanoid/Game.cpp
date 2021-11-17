@@ -29,6 +29,9 @@ void Game::Initialize(HWND window, int width, int height)
 	m_deviceResources->CreateWindowSizeDependentResources();
 	CreateWindowSizeDependentResources();
 
+	m_keyboard = std::make_unique<Keyboard>();
+	m_mouse = std::make_unique<Mouse>();
+	m_mouse->SetWindow(window);
 	// TODO: Change the timer settings if you want something other than the default variable timestep mode.
 	// e.g. for 60 FPS fixed timestep update logic, call:
 	/*
@@ -55,6 +58,16 @@ void Game::Update(DX::StepTimer const& timer)
 	float elapsedTime = float(timer.GetElapsedSeconds());
 
 	// TODO: Add your game logic here.
+
+	auto kb = m_keyboard->GetState();
+	if (kb.Escape)
+	{
+		ExitGame();
+	}
+
+	auto mouse = m_mouse->GetState();
+
+
 	elapsedTime;
 }
 #pragma endregion
@@ -84,7 +97,7 @@ void Game::Render()
 	m_spriteBatch->Draw(m_background.Get(), m_fullscreenRect);
 
 	m_spriteBatch->Draw(m_texture.Get(), m_screenPos, nullptr,
-		Colors::White, 0.f, m_origin);
+		Colors::White, 0.f, m_origin, .2f);
 
 	Vector2 origin = m_font->MeasureString(output) / 2.f;
 
@@ -99,6 +112,7 @@ void Game::Render()
 
 	// Show the new frame.
 	m_deviceResources->Present();
+
 }
 
 // Helper method to clear the back buffers.
@@ -217,7 +231,7 @@ void Game::CreateWindowSizeDependentResources()
 	// TODO: Initialize windows-size dependent objects here.
 	auto size = m_deviceResources->GetOutputSize();
 	m_screenPos.x = float(size.right) / 2.f;
-	m_screenPos.y = float(size.bottom) / 2.f;
+	m_screenPos.y = float(size.bottom) / 10.f;
 
 	m_stretchRect.left = size.right / 4;
 	m_stretchRect.top = size.bottom / 4;
