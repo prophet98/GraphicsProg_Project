@@ -65,15 +65,22 @@ private:
 	DirectX::SimpleMath::Vector2 m_screenPos;
 	DirectX::SimpleMath::Vector2 m_origin;
 	std::unique_ptr<DirectX::CommonStates> m_states;
+	std::unique_ptr<DirectX::BasicEffect> m_effect;
+
 	RECT m_tileRect;
 	RECT m_stretchRect;
 	RECT m_fullscreenRect;
 	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> m_background;
-	std::unique_ptr<DirectX::SpriteFont> m_font;
 
+	using VertexType = DirectX::VertexPositionColor;
+	std::unique_ptr<DirectX::PrimitiveBatch<VertexType>> m_batch;
+	Microsoft::WRL::ComPtr<ID3D11InputLayout> m_inputLayout;
+
+	std::unique_ptr<DirectX::SpriteFont> m_font;
 	DirectX::SimpleMath::Vector2 m_fontPos;
 	std::unique_ptr<DirectX::SpriteBatch> m_spriteBatch;
 
 	std::unique_ptr<DirectX::Keyboard> m_keyboard;
 	std::unique_ptr<DirectX::Mouse> m_mouse;
+
 };

@@ -96,15 +96,39 @@ void Game::Render()
 
 	m_spriteBatch->Draw(m_background.Get(), m_fullscreenRect);
 
-	m_spriteBatch->Draw(m_texture.Get(), m_screenPos, nullptr,
-		Colors::White, 0.f, m_origin, .2f);
-
 	Vector2 origin = m_font->MeasureString(output) / 2.f;
 
 	m_font->DrawString(m_spriteBatch.get(), output,
 		m_fontPos, Colors::White, 0.f, origin);
 
 	m_spriteBatch->End();
+
+	context->OMSetBlendState(m_states->Opaque(), nullptr, 0xFFFFFFFF);
+	context->OMSetDepthStencilState(m_states->DepthNone(), 0);
+	context->RSSetState(m_states->CullNone());
+
+	m_effect->Apply(context);
+
+	context->IASetInputLayout(m_inputLayout.Get());
+
+	m_batch->Begin();
+	
+	RECT test;
+	test.left = 0.0f;
+	test.top = 0.0f;
+	test.right = 200.0f;
+	test.bottom = 100.0f;
+
+
+	VertexPositionColor v1(Vector2(test.left, test.top), Colors::Yellow);
+	VertexPositionColor v2(Vector2((test.left + test.right), test.top), Colors::Yellow);
+	VertexPositionColor v3(Vector2(test.right, test.bottom), Colors::Yellow);
+	VertexPositionColor v4(Vector2(test.left, test.top + test.bottom), Colors::Yellow);
+
+	m_batch->DrawQuad(v1, v2, v3, v4);
+
+	m_batch->End();
+
 
 	context;
 
@@ -192,35 +216,25 @@ void Game::CreateDeviceDependentResources()
 {
 	auto device = m_deviceResources->GetD3DDevice();
 	auto context = m_deviceResources->GetD3DDeviceContext();
+	m_states = std::make_unique<CommonStates>(device);
 	m_spriteBatch = std::make_unique<SpriteBatch>(context);
+	m_font = std::make_unique<SpriteFont>(device, L"myfile.spritefont");
+	m_effect = std::make_unique<BasicEffect>(device);
+	m_effect->SetVertexColorEnabled(true);
 
 	ComPtr<ID3D11Resource> resource;
 	// TODO: Initialize device dependent objects here (independent of window size).
 	DX::ThrowIfFailed(
-		CreateWICTextureFromFile(device, L"Title.png", resource.GetAddressOf(),
-			m_texture.ReleaseAndGetAddressOf()));
-	DX::ThrowIfFailed(
 		CreateWICTextureFromFile(device, L"Background.png", nullptr,
 			m_background.ReleaseAndGetAddressOf()));
-	m_states = std::make_unique<CommonStates>(device);
-	ComPtr<ID3D11Texture2D> title;
-	DX::ThrowIfFailed(resource.As(&title));
 
-	CD3D11_TEXTURE2D_DESC titleDesc;
-	title->GetDesc(&titleDesc);
+	DX::ThrowIfFailed(
+		CreateInputLayoutFromEffect<VertexType>(device, m_effect.get(),
+			m_inputLayout.ReleaseAndGetAddressOf())
+	);
 
-	m_origin.x = float(titleDesc.Width / 2);
-	m_origin.y = float(titleDesc.Height / 2);
+	m_batch = std::make_unique<PrimitiveBatch<VertexType>>(context);
 
-	m_tileRect.left = titleDesc.Width * 2;
-	m_tileRect.right = titleDesc.Width * 6;
-	m_tileRect.top = titleDesc.Height * 2;
-	m_tileRect.bottom = titleDesc.Height * 6;
-
-	m_font = std::make_unique<SpriteFont>(device, L"myfile.spritefont");
-
-	//auto context = m_deviceResources->GetD3DDeviceContext();
-	m_spriteBatch = std::make_unique<SpriteBatch>(context);
 
 	device;
 }
@@ -230,6 +244,10 @@ void Game::CreateWindowSizeDependentResources()
 {
 	// TODO: Initialize windows-size dependent objects here.
 	auto size = m_deviceResources->GetOutputSize();
+	Matrix proj = Matrix::CreateScale(2.f / float(size.right),
+		-2.f / float(size.bottom), 1.f)
+		* Matrix::CreateTranslation(-1.f, 1.f, 0.f);
+	m_effect->SetProjection(proj);
 	m_screenPos.x = float(size.right) / 2.f;
 	m_screenPos.y = float(size.bottom) / 10.f;
 
@@ -252,8 +270,9 @@ void Game::OnDeviceLost()
 	m_states.reset();
 	m_background.Reset();
 	m_font.reset();
-	m_spriteBatch.reset();
-
+	m_effect.reset();
+	m_batch.reset();
+	m_inputLayout.Reset();
 }
 
 void Game::OnDeviceRestored()

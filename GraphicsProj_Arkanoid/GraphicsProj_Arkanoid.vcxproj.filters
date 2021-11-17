@@ -11,7 +11,7 @@
     <Filter Include="Gameobjects">
       <UniqueIdentifier>{449669b8-57cb-4072-8f29-122b658783db}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Tools">
+    <Filter Include="Controllers">
       <UniqueIdentifier>{1bba0533-0728-4367-bbd5-0e53c84dcba3}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -28,11 +28,14 @@
     <ClInclude Include="Ball.h">
       <Filter>Gameobjects</Filter>
     </ClInclude>
-    <ClInclude Include="Gameobject.h">
+    <ClInclude Include="BrickTile.h">
       <Filter>Gameobjects</Filter>
     </ClInclude>
-    <ClInclude Include="Vector2.h">
-      <Filter>Tools</Filter>
+    <ClInclude Include="LevelLoader.h">
+      <Filter>Controllers</Filter>
+    </ClInclude>
+    <ClInclude Include="BrickManager.h">
+      <Filter>Controllers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -45,11 +48,14 @@
     <ClCompile Include="Ball.cpp">
       <Filter>Gameobjects</Filter>
     </ClCompile>
-    <ClCompile Include="Gameobject.cpp">
+    <ClCompile Include="BrickTile.cpp">
       <Filter>Gameobjects</Filter>
     </ClCompile>
-    <ClCompile Include="Vector2.cpp">
-      <Filter>Tools</Filter>
+    <ClCompile Include="LevelLoader.cpp">
+      <Filter>Controllers</Filter>
+    </ClCompile>
+    <ClCompile Include="BrickManager.cpp">
+      <Filter>Controllers</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
