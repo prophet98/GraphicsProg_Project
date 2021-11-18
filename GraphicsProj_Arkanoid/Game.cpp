@@ -4,6 +4,7 @@
 
 #include "pch.h"
 #include "Game.h"
+#include <BrickManager.h>
 
 extern void ExitGame() noexcept;
 
@@ -112,21 +113,23 @@ void Game::Render()
 	context->IASetInputLayout(m_inputLayout.Get());
 
 	m_batch->Begin();
-	
-	RECT test;
-	test.left = 0.0f;
-	test.top = 0.0f;
-	test.right = 200.0f;
-	test.bottom = 100.0f;
+
+	//RECT test;
+	//test.left = 100.0f;//x
+	//test.top = 100.0f;//y
+	//test.right = 400.0f;//x
+	//test.bottom = 300.0f;//y
 
 
-	VertexPositionColor v1(Vector2(test.left, test.top), Colors::Yellow);
-	VertexPositionColor v2(Vector2((test.left + test.right), test.top), Colors::Yellow);
-	VertexPositionColor v3(Vector2(test.right, test.bottom), Colors::Yellow);
-	VertexPositionColor v4(Vector2(test.left, test.top + test.bottom), Colors::Yellow);
+	//VertexPositionColor v1(Vector2(test.left, test.top), Colors::Yellow);
+	//VertexPositionColor v2(Vector2(test.right, test.top), Colors::Yellow);
+	//VertexPositionColor v3(Vector2(test.right, test.bottom), Colors::Yellow);
+	//VertexPositionColor v4(Vector2(test.left, test.botstom), Colors::Yellow);
 
-	m_batch->DrawQuad(v1, v2, v3, v4);
+	//m_batch->DrawQuad(v1, v2, v3, v4);
 
+	BrickManager* Manager = new BrickManager();
+	Manager->DrawBrick(0, 0, m_batch);
 	m_batch->End();
 
 
