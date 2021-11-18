@@ -2,15 +2,33 @@
 #include "BrickManager.h"
 #include "BrickTile.h"
 
-void BrickManager::DrawBrick(int width, int height, const GeometryBatch& batch)
+void BrickManager::DrawBricks(int width, int height, const GeometryBatch& batch)
 {
-	RECT rectBrick;
-	rectBrick.left = 0.0f;
-	rectBrick.top = 0.0f;
-	rectBrick.right = 100.0f;
-	rectBrick.bottom = 100.0f;
 
-	BrickTile Brick = BrickTile(rectBrick, DirectX::Colors::Red);
+	float spawnOffset = 105.0f;
 
-	batch->DrawQuad(Brick.v1, Brick.v2, Brick.v3, Brick.v4);
+	for (unsigned int x = 0; x < height; x++)
+	{
+		for (unsigned int y = 0; y < width; y++)
+		{
+			RECT defaultBrickSize;
+			defaultBrickSize.left = 0.0f;
+			defaultBrickSize.top = 0.0f;
+			defaultBrickSize.right = 100.0f;
+			defaultBrickSize.bottom = 100.0f;
+
+			defaultBrickSize.left = y * spawnOffset;
+			defaultBrickSize.right += y *  spawnOffset;
+
+			defaultBrickSize.top = x * spawnOffset;
+			defaultBrickSize.bottom += x * spawnOffset;
+
+			BrickTile Brick = BrickTile(defaultBrickSize, DirectX::Colors::Red);
+			batch->DrawQuad(Brick.v1, Brick.v2, Brick.v3, Brick.v4);
+		}
+
+	}
+
+
+	
 }

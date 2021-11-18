@@ -4,6 +4,6 @@ using GeometryBatch = std::unique_ptr<DirectX::PrimitiveBatch< DirectX::VertexPo
 class BrickManager
 {
 public:
-	void DrawBrick(int width, int height, const GeometryBatch& batch);
+	void DrawBricks(int width, int height, const GeometryBatch& batch);
 };
 

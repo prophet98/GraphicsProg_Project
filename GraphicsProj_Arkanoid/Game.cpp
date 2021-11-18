@@ -95,12 +95,17 @@ void Game::Render()
 
 	const wchar_t* output = L"Hello World";
 
+
 	m_spriteBatch->Draw(m_background.Get(), m_fullscreenRect);
 
+
+	m_spriteBatch->Draw(m_texture.Get(), m_screenPos, nullptr,
+		Colors::White, 0.f, m_origin);
 	Vector2 origin = m_font->MeasureString(output) / 2.f;
 
 	m_font->DrawString(m_spriteBatch.get(), output,
 		m_fontPos, Colors::White, 0.f, origin);
+
 
 	m_spriteBatch->End();
 
@@ -114,24 +119,9 @@ void Game::Render()
 
 	m_batch->Begin();
 
-	//RECT test;
-	//test.left = 100.0f;//x
-	//test.top = 100.0f;//y
-	//test.right = 400.0f;//x
-	//test.bottom = 300.0f;//y
-
-
-	//VertexPositionColor v1(Vector2(test.left, test.top), Colors::Yellow);
-	//VertexPositionColor v2(Vector2(test.right, test.top), Colors::Yellow);
-	//VertexPositionColor v3(Vector2(test.right, test.bottom), Colors::Yellow);
-	//VertexPositionColor v4(Vector2(test.left, test.botstom), Colors::Yellow);
-
-	//m_batch->DrawQuad(v1, v2, v3, v4);
-
 	BrickManager* Manager = new BrickManager();
-	Manager->DrawBrick(0, 0, m_batch);
+	Manager->DrawBricks(7, 2, m_batch);
 	m_batch->End();
-
 
 	context;
 
@@ -230,14 +220,25 @@ void Game::CreateDeviceDependentResources()
 	DX::ThrowIfFailed(
 		CreateWICTextureFromFile(device, L"Background.png", nullptr,
 			m_background.ReleaseAndGetAddressOf()));
-
 	DX::ThrowIfFailed(
 		CreateInputLayoutFromEffect<VertexType>(device, m_effect.get(),
-			m_inputLayout.ReleaseAndGetAddressOf())
-	);
+			m_inputLayout.ReleaseAndGetAddressOf()));
+
+	DX::ThrowIfFailed(
+		CreateWICTextureFromFile(device, L"ball.png",
+			resource.GetAddressOf(),
+			m_texture.ReleaseAndGetAddressOf()));
+	ComPtr<ID3D11Texture2D> ball;
+	DX::ThrowIfFailed(resource.As(&ball));
+
+	CD3D11_TEXTURE2D_DESC ballDesc;
+	ball->GetDesc(&ballDesc);
+
+	m_origin.x = float(ballDesc.Width / 2);
+	m_origin.y = float(ballDesc.Height / 2);
+
 
 	m_batch = std::make_unique<PrimitiveBatch<VertexType>>(context);
-
 
 	device;
 }
@@ -276,6 +277,8 @@ void Game::OnDeviceLost()
 	m_effect.reset();
 	m_batch.reset();
 	m_inputLayout.Reset();
+	m_texture.Reset();
+
 }
 
 void Game::OnDeviceRestored()

@@ -25,9 +25,6 @@
       <Filter>Common</Filter>
     </ClInclude>
     <ClInclude Include="AnimatedTexture.h" />
-    <ClInclude Include="Ball.h">
-      <Filter>Gameobjects</Filter>
-    </ClInclude>
     <ClInclude Include="BrickTile.h">
       <Filter>Gameobjects</Filter>
     </ClInclude>
@@ -37,6 +34,9 @@
     <ClInclude Include="BrickManager.h">
       <Filter>Controllers</Filter>
     </ClInclude>
+    <ClInclude Include="Ball.h">
+      <Filter>Gameobjects</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp" />
@@ -44,9 +44,6 @@
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="DeviceResources.cpp">
       <Filter>Common</Filter>
-    </ClCompile>
-    <ClCompile Include="Ball.cpp">
-      <Filter>Gameobjects</Filter>
     </ClCompile>
     <ClCompile Include="BrickTile.cpp">
       <Filter>Gameobjects</Filter>
@@ -56,6 +53,9 @@
     </ClCompile>
     <ClCompile Include="BrickManager.cpp">
       <Filter>Controllers</Filter>
+    </ClCompile>
+    <ClCompile Include="Ball.cpp">
+      <Filter>Gameobjects</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
