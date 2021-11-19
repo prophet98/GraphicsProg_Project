@@ -5,6 +5,8 @@ class Ball
 {
 public:
 	Ball(const Vec2& _pos, const Vec2& _vel);
+	void Update(float dt);
+	Vec2 GetPosition();
 private:
 	static constexpr float radius = 7.0f;
 	Vec2 pos;

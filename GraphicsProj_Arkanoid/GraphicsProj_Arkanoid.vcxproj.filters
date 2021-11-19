@@ -71,6 +71,9 @@
     <Image Include="Background.png">
       <Filter>Assets</Filter>
     </Image>
+    <Image Include="ball.png">
+      <Filter>Assets</Filter>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <Manifest Include="settings.manifest">

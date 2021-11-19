@@ -5,11 +5,6 @@ VisualStudioVersion = 16.0.31624.102
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GraphicsProj_Arkanoid", "GraphicsProj_Arkanoid.vcxproj", "{48AA8068-2CCC-4E9B-A445-DE8ABCBF9A8D}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{3074412B-4A60-41EA-B8A9-C2F35D5EA088}"
-	ProjectSection(SolutionItems) = preProject
-		ball.png = ball.png
-	EndProjectSection
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64

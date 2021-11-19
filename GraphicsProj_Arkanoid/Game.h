@@ -8,6 +8,7 @@
 #include "StepTimer.h"
 #include "AnimatedTexture.h"
 
+class Ball;
 // A basic game implementation that creates a D3D11 device and
 // provides a game loop.
 class Game final : public DX::IDeviceNotify
@@ -70,7 +71,7 @@ private:
 	RECT m_fullscreenRect;
 	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> m_background;
 
-	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> m_texture;
+	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> m_BallTexture;
 	std::unique_ptr<DirectX::SpriteBatch> m_spriteBatch;
 
 	using VertexType = DirectX::VertexPositionColor;
@@ -83,4 +84,5 @@ private:
 	std::unique_ptr<DirectX::Keyboard> m_keyboard;
 	std::unique_ptr<DirectX::Mouse> m_mouse;
 
+	Ball* ball;
 };

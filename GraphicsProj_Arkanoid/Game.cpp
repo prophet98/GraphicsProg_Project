@@ -5,7 +5,7 @@
 #include "pch.h"
 #include "Game.h"
 #include <BrickManager.h>
-
+#include "Ball.h"
 extern void ExitGame() noexcept;
 
 using namespace DirectX;
@@ -33,6 +33,9 @@ void Game::Initialize(HWND window, int width, int height)
 	m_keyboard = std::make_unique<Keyboard>();
 	m_mouse = std::make_unique<Mouse>();
 	m_mouse->SetWindow(window);
+
+	ball = new Ball(Vector2(300.0f, 300.0f), Vector2(100.0f, 100.0f));
+
 	// TODO: Change the timer settings if you want something other than the default variable timestep mode.
 	// e.g. for 60 FPS fixed timestep update logic, call:
 	/*
@@ -68,6 +71,7 @@ void Game::Update(DX::StepTimer const& timer)
 
 	auto mouse = m_mouse->GetState();
 
+	ball->Update(elapsedTime);
 
 	elapsedTime;
 }
@@ -98,14 +102,12 @@ void Game::Render()
 
 	m_spriteBatch->Draw(m_background.Get(), m_fullscreenRect);
 
+	m_spriteBatch->Draw(m_BallTexture.Get(), ball->GetPosition(), nullptr,
+		Colors::White, 0.f, m_origin,.1f);
 
-	m_spriteBatch->Draw(m_texture.Get(), m_screenPos, nullptr,
-		Colors::White, 0.f, m_origin);
 	Vector2 origin = m_font->MeasureString(output) / 2.f;
-
 	m_font->DrawString(m_spriteBatch.get(), output,
 		m_fontPos, Colors::White, 0.f, origin);
-
 
 	m_spriteBatch->End();
 
@@ -227,7 +229,7 @@ void Game::CreateDeviceDependentResources()
 	DX::ThrowIfFailed(
 		CreateWICTextureFromFile(device, L"ball.png",
 			resource.GetAddressOf(),
-			m_texture.ReleaseAndGetAddressOf()));
+			m_BallTexture.ReleaseAndGetAddressOf()));
 	ComPtr<ID3D11Texture2D> ball;
 	DX::ThrowIfFailed(resource.As(&ball));
 
@@ -277,7 +279,7 @@ void Game::OnDeviceLost()
 	m_effect.reset();
 	m_batch.reset();
 	m_inputLayout.Reset();
-	m_texture.Reset();
+	m_BallTexture.Reset();
 
 }
 
