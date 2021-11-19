@@ -35,6 +35,12 @@ void Game::Initialize(HWND window, int width, int height)
 	m_mouse->SetWindow(window);
 
 	ball = new Ball(Vector2(300.0f, 300.0f), Vector2(100.0f, 100.0f));
+	
+	walls.left = 0.0f;
+	walls.top = 0.0f;
+	walls.right = width;
+	walls.bottom = height;
+
 
 	// TODO: Change the timer settings if you want something other than the default variable timestep mode.
 	// e.g. for 60 FPS fixed timestep update logic, call:
@@ -72,7 +78,7 @@ void Game::Update(DX::StepTimer const& timer)
 	auto mouse = m_mouse->GetState();
 
 	ball->Update(elapsedTime);
-
+	ball->DoWallCollision(walls);
 	elapsedTime;
 }
 #pragma endregion
@@ -103,7 +109,7 @@ void Game::Render()
 	m_spriteBatch->Draw(m_background.Get(), m_fullscreenRect);
 
 	m_spriteBatch->Draw(m_BallTexture.Get(), ball->GetPosition(), nullptr,
-		Colors::White, 0.f, m_origin,.1f);
+		Colors::White, 0.f, m_origin, .05f);
 
 	Vector2 origin = m_font->MeasureString(output) / 2.f;
 	m_font->DrawString(m_spriteBatch.get(), output,
@@ -120,7 +126,6 @@ void Game::Render()
 	context->IASetInputLayout(m_inputLayout.Get());
 
 	m_batch->Begin();
-
 	BrickManager* Manager = new BrickManager();
 	Manager->DrawBricks(7, 2, m_batch);
 	m_batch->End();
@@ -230,15 +235,13 @@ void Game::CreateDeviceDependentResources()
 		CreateWICTextureFromFile(device, L"ball.png",
 			resource.GetAddressOf(),
 			m_BallTexture.ReleaseAndGetAddressOf()));
-	ComPtr<ID3D11Texture2D> ball;
-	DX::ThrowIfFailed(resource.As(&ball));
-
+	ComPtr<ID3D11Texture2D> ballTex;
+	DX::ThrowIfFailed(resource.As(&ballTex));
 	CD3D11_TEXTURE2D_DESC ballDesc;
-	ball->GetDesc(&ballDesc);
+	ballTex->GetDesc(&ballDesc);
 
 	m_origin.x = float(ballDesc.Width / 2);
 	m_origin.y = float(ballDesc.Height / 2);
-
 
 	m_batch = std::make_unique<PrimitiveBatch<VertexType>>(context);
 

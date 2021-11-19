@@ -85,4 +85,5 @@ private:
 	std::unique_ptr<DirectX::Mouse> m_mouse;
 
 	Ball* ball;
+	RECT walls;
 };
