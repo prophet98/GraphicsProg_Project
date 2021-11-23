@@ -296,6 +296,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         return MAKELRESULT(0, MNC_CLOSE);
 
     }
+  
 
     return DefWindowProc(hWnd, message, wParam, lParam);
 }

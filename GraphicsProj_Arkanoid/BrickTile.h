@@ -8,6 +8,7 @@ class Gameobject;
 class BrickTile
 {
 public:
+	BrickTile() = default;
 	BrickTile(const RECT& _rect, XMVECTORF32 _color) : rect(_rect), m_color(_color) {
 
 		v1 = VertexPositionColor(DirectX::SimpleMath::Vector2(_rect.left, _rect.top), m_color);
@@ -24,10 +25,11 @@ public:
 	VertexPositionColor v3;
 	VertexPositionColor v4;
 	bool isDestroyed;
+protected:
+	bool IsOverlappingWith(const RECT& other);
 
 private:
 	RECT rect;
 	XMVECTORF32 m_color;
-	bool IsOverlappingWith(const RECT& other);
 };
 

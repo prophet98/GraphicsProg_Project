@@ -36,7 +36,7 @@ void Game::Initialize(HWND window, int width, int height)
 
 	ball = new Ball(Vector2(300.0f, 300.0f), Vector2(300.0f, 100.0f));
 	Manager = new BrickManager();
-
+	paddle = new Paddle(Vector2(300.0f, 300.0f), 20.0f, 10.0f);
 	Manager->CreateBricks(4, 4);
 	walls.left = 0.0f;
 	walls.top = 0.0f;
@@ -76,11 +76,15 @@ void Game::Update(DX::StepTimer const& timer)
 	{
 		ExitGame();
 	}
+	//paddle inputs
+	paddle->Update(kb, elapsedTime);
 
 	auto mouse = m_mouse->GetState();
 
 	ball->Update(elapsedTime);
 	ball->DoWallCollision(walls);
+	paddle->DoWallCollision(walls);
+	paddle->DoBallCollision(*ball);
 	elapsedTime;
 }
 #pragma endregion
@@ -128,8 +132,9 @@ void Game::Render()
 	context->IASetInputLayout(m_inputLayout.Get());
 
 	m_batch->Begin();
-
+	paddle->Draw(m_batch);
 	Manager->UpdateBrickState(Manager->brickList, *ball, m_batch);
+
 	m_batch->End();
 
 	context;

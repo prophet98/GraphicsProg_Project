@@ -8,6 +8,7 @@
 #include "StepTimer.h"
 #include "AnimatedTexture.h"
 #include "BrickManager.h"
+#include <Paddle.h>
 
 class Ball;
 // A basic game implementation that creates a D3D11 device and
@@ -87,5 +88,6 @@ private:
 
 	Ball* ball;
 	BrickManager* Manager;
+	Paddle* paddle;
 	RECT walls;
 };
