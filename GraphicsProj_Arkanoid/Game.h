@@ -7,6 +7,7 @@
 #include "DeviceResources.h"
 #include "StepTimer.h"
 #include "AnimatedTexture.h"
+#include "BrickManager.h"
 
 class Ball;
 // A basic game implementation that creates a D3D11 device and
@@ -85,5 +86,6 @@ private:
 	std::unique_ptr<DirectX::Mouse> m_mouse;
 
 	Ball* ball;
+	BrickManager* Manager;
 	RECT walls;
 };

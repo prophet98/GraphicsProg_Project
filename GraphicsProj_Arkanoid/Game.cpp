@@ -35,7 +35,9 @@ void Game::Initialize(HWND window, int width, int height)
 	m_mouse->SetWindow(window);
 
 	ball = new Ball(Vector2(300.0f, 300.0f), Vector2(300.0f, 100.0f));
-	
+	Manager = new BrickManager();
+
+	Manager->CreateBricks(4, 4);
 	walls.left = 0.0f;
 	walls.top = 0.0f;
 	walls.right = width;
@@ -126,8 +128,8 @@ void Game::Render()
 	context->IASetInputLayout(m_inputLayout.Get());
 
 	m_batch->Begin();
-	BrickManager* Manager = new BrickManager();
-	Manager->DrawBricks(7, 2, m_batch);
+
+	Manager->UpdateBrickState(Manager->brickList, *ball, m_batch);
 	m_batch->End();
 
 	context;
