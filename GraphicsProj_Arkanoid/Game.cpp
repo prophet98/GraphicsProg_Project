@@ -34,7 +34,7 @@ void Game::Initialize(HWND window, int width, int height)
 	m_mouse = std::make_unique<Mouse>();
 	m_mouse->SetWindow(window);
 
-	ball = new Ball(Vector2(300.0f, 300.0f), Vector2(100.0f, 100.0f));
+	ball = new Ball(Vector2(300.0f, 300.0f), Vector2(300.0f, 100.0f));
 	
 	walls.left = 0.0f;
 	walls.top = 0.0f;
