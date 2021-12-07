@@ -34,10 +34,10 @@ void Game::Initialize(HWND window, int width, int height)
 	m_mouse = std::make_unique<Mouse>();
 	m_mouse->SetWindow(window);
 
-	ball = new Ball(Vector2(300.0f, 300.0f), Vector2(300.0f, 100.0f));
+	ball = new Ball(Vector2(400.0f, 400.0f), Vector2(300.0f, 300.0f));
 	Manager = new BrickManager();
-	paddle = new Paddle(Vector2(300.0f, 300.0f), 20.0f, 10.0f);
-	Manager->CreateBricks(4, 4);
+	paddle = new Paddle(Vector2(500.0f, 500.0f), 60.0, 10.0f);
+	Manager->CreateBricks(nBricksAcross, nBricksDown, brickWidth,brickHeigth);
 	walls.left = 0.0f;
 	walls.top = 0.0f;
 	walls.right = width;
@@ -115,7 +115,7 @@ void Game::Render()
 	m_spriteBatch->Draw(m_background.Get(), m_fullscreenRect);
 
 	m_spriteBatch->Draw(m_BallTexture.Get(), ball->GetPosition(), nullptr,
-		Colors::White, 0.f, m_origin, .05f);
+		Colors::White, 0.f, m_origin, .03f);
 
 	Vector2 origin = m_font->MeasureString(output) / 2.f;
 	m_font->DrawString(m_spriteBatch.get(), output,

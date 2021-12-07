@@ -3,28 +3,39 @@
 #include "BrickTile.h"
 
 #include <iostream>
-void BrickManager::CreateBricks(int width, int height)
+void BrickManager::CreateBricks(int nBricksAcross, int nBricksDown, int brickWidth, int brickHeigth)
 {
-	float spawnOffset = 105.0f;
+	float spawnOffset;
 
-	for (unsigned int x = 0; x < height; x++)
+	for (unsigned int y = 1; y < nBricksDown + 1; y++)
 	{
-		for (unsigned int y = 0; y < width; y++)
+		for (unsigned int x = 1; x < nBricksAcross + 1; x++)
 		{
 			RECT defaultBrickSize;
+
 			defaultBrickSize.left = 0.0f;
 			defaultBrickSize.top = 0.0f;
-			defaultBrickSize.right = 100.0f;
-			defaultBrickSize.bottom = 100.0f;
+			defaultBrickSize.right = brickWidth;
+			defaultBrickSize.bottom = brickHeigth;
+			spawnOffset = defaultBrickSize.right - defaultBrickSize.left + 5;
 
-			defaultBrickSize.left = y * spawnOffset;
-			defaultBrickSize.right += y * spawnOffset;
+			defaultBrickSize.left = x * spawnOffset;
+			defaultBrickSize.right += x * spawnOffset;
 
-			defaultBrickSize.top = x * spawnOffset;
-			defaultBrickSize.bottom += x * spawnOffset;
+			defaultBrickSize.top = y * spawnOffset;
+			defaultBrickSize.bottom += y * spawnOffset;
+			if (y%2 == 0)
+			{
+				BrickTile brick = BrickTile(defaultBrickSize, DirectX::Colors::Orange);
+				brickList.push_back(brick);
 
-			BrickTile brick = BrickTile(defaultBrickSize, DirectX::Colors::Red);
-			brickList.push_back(brick);
+			}
+			else
+			{
+				BrickTile brick = BrickTile(defaultBrickSize, DirectX::Colors::OrangeRed);
+				brickList.push_back(brick);
+
+			}
 		}
 
 	}

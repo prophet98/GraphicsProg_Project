@@ -90,4 +90,11 @@ private:
 	BrickManager* Manager;
 	Paddle* paddle;
 	RECT walls;
+
+	//game settings parameters
+	static constexpr int brickWidth = 40;
+	static constexpr int brickHeigth = 40;
+	static constexpr int nBricksAcross = 12;
+	static constexpr int nBricksDown = 4;
+
 };
