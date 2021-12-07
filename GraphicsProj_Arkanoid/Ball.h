@@ -11,8 +11,9 @@ public:
 	void ReboundX();
 	void ReboundY();
 	RECT GetRect();
+	Vec2 GetVel() const;
 private:
-	static constexpr float radius = 20.0f;
+	static constexpr float radius = 10.0f;
 	Vec2 pos;
 	Vec2 vel;
 

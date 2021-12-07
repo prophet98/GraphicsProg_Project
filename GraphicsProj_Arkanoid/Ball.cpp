@@ -71,5 +71,10 @@ RECT Ball::GetRect()
 	return ballRect;
 }
 
+Vec2 Ball::GetVel() const
+{
+	return vel;
+}
+
 
 

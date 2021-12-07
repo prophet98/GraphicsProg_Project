@@ -26,7 +26,7 @@ public:
 	VertexPositionColor v4;
 	bool isDestroyed;
 protected:
-	bool IsOverlappingWith(const RECT& other);
+	virtual bool IsOverlappingWith(const RECT& other);
 
 private:
 	RECT rect;
