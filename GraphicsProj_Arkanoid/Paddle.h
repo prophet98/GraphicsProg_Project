@@ -12,13 +12,15 @@ public:
 	void Update(const DirectX::Keyboard::State key, float deltaTime);
 	RECT GetRect()const;
 	void Draw(const GeometryBatch& batch);
+	bool IsOverlappingWith(const RECT& rect) override;
 
 private:
-	DirectX::XMVECTORF32 color = DirectX::Colors::Red;
+	DirectX::XMVECTORF32 color = DirectX::Colors::Wheat;
 	float halfWidth;
 	float halfHeight;
-	float speed = 300.0f;
+	float speed = 500.0f;
 	Vec2 pos;
+
 	VertexPositionColor v1;
 	VertexPositionColor v2;
 	VertexPositionColor v3;

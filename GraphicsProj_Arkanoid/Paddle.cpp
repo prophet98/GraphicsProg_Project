@@ -9,7 +9,7 @@ Paddle::Paddle(Vec2 _pos, float _halfWidth, float _halfHeight) : pos(_pos), half
 
 bool Paddle::DoBallCollision(Ball& ball)
 {
-	if (IsOverlappingWith(ball.GetRect()))
+	if (ball.GetVel().y > 0 && IsOverlappingWith(ball.GetRect()))
 	{
 		ball.ReboundY();
 		return true;
@@ -64,4 +64,10 @@ void Paddle::Draw(const GeometryBatch& batch)
 	v4 = VertexPositionColor(DirectX::SimpleMath::Vector2(GetRect().left, GetRect().bottom), color);
 
 	batch->DrawQuad(v1, v2, v3, v4);
+}
+
+bool Paddle::IsOverlappingWith(const RECT& other)
+{
+	return GetRect().right > other.left && GetRect().left < other.right
+		&& GetRect().bottom > other.top && GetRect().top < other.bottom;
 }
