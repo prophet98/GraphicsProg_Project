@@ -94,8 +94,8 @@ private:
 	//game settings parameters
 	static constexpr int brickWidth = 40;
 	static constexpr int brickHeigth = 40;
-	static constexpr int nBricksAcross = 12;
-	static constexpr int nBricksDown = 4;
+	static constexpr int nBricksAcross = 10;
+	static constexpr int nBricksDown = 3;
 
 	bool GameOver = false;
 

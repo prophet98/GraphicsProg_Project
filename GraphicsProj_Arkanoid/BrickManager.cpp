@@ -5,7 +5,7 @@
 #include <iostream>
 void BrickManager::CreateBricks(int nBricksAcross, int nBricksDown, int brickWidth, int brickHeigth)
 {
-	float spawnOffset;
+	float spawnOffset = 0.0f;
 
 	for (unsigned int y = 1; y < nBricksDown + 1; y++)
 	{
@@ -17,25 +17,29 @@ void BrickManager::CreateBricks(int nBricksAcross, int nBricksDown, int brickWid
 			defaultBrickSize.top = 0.0f;
 			defaultBrickSize.right = brickWidth;
 			defaultBrickSize.bottom = brickHeigth;
-			spawnOffset = defaultBrickSize.right - defaultBrickSize.left + 5;
 
-			defaultBrickSize.left = x * spawnOffset;
-			defaultBrickSize.right += x * spawnOffset;
+			spawnOffset = defaultBrickSize.right + brickDistance ;
 
-			defaultBrickSize.top = y * spawnOffset;
-			defaultBrickSize.bottom += y * spawnOffset;
+			defaultBrickSize.left = x * spawnOffset + centeredPos;
+			defaultBrickSize.right += x * spawnOffset + centeredPos;
+
+			defaultBrickSize.top = y * spawnOffset + centeredPos;
+			defaultBrickSize.bottom += y * spawnOffset + centeredPos;
+
 			if (y % 2 == 0)
 			{
 				BrickTile brick = BrickTile(defaultBrickSize, DirectX::Colors::Orange);
 				brickList.push_back(brick);
-
+				brick.isDestroyed = false;
 			}
 			else
 			{
 				BrickTile brick = BrickTile(defaultBrickSize, DirectX::Colors::OrangeRed);
 				brickList.push_back(brick);
-
+				brick.isDestroyed = false;
 			}
+
+			
 		}
 
 	}
@@ -48,11 +52,10 @@ void BrickManager::UpdateBrickState(std::vector<BrickTile>& brickList, Ball& bal
 	float currentCollDist = 0;
 	int curColIndex = 0;
 	for (std::vector<BrickTile>::iterator brickElem = brickList.begin(); brickElem != brickList.end(); ++brickElem) {
-
+		
 		if (!brickElem->isDestroyed)
 		{
 			batch->DrawQuad(brickElem->v1, brickElem->v2, brickElem->v3, brickElem->v4);
-
 		}
 		if (brickElem->CheckBallCollision(ball))
 		{
@@ -71,6 +74,8 @@ void BrickManager::UpdateBrickState(std::vector<BrickTile>& brickList, Ball& bal
 				curColIndex = brickIndex;
 				hasCollided = true;
 			}
+			destroyedBricks++;
+
 		}
 		brickIndex++;
 	}
@@ -78,7 +83,16 @@ void BrickManager::UpdateBrickState(std::vector<BrickTile>& brickList, Ball& bal
 	{
 		brickList[curColIndex].ExecuteBallCollision(ball);
 	}
+	if (destroyedBricks == brickList.size())
+	{
+		//handle restart
+	}
 
+}
+
+void BrickManager::RemoveAllBricks()
+{
+	brickList.clear();
 }
 
 

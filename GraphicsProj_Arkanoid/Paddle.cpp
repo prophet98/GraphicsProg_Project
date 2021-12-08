@@ -45,6 +45,7 @@ void Paddle::DoWallCollision(const RECT& walls)
 
 void Paddle::Update(const DirectX::Keyboard::State key, float deltaTime)
 {
+	
 	if (key.Left)
 	{
 		pos.x -= speed * deltaTime;

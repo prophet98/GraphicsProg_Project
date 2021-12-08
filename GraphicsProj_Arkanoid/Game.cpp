@@ -23,7 +23,7 @@ Game::Game() noexcept(false)
 void Game::Initialize(HWND window, int width, int height)
 {
 	m_deviceResources->SetWindow(window, width, height);
-
+	GameOver = true;
 	m_deviceResources->CreateDeviceResources();
 	CreateDeviceDependentResources();
 
@@ -34,10 +34,10 @@ void Game::Initialize(HWND window, int width, int height)
 	m_mouse = std::make_unique<Mouse>();
 	m_mouse->SetWindow(window);
 
-	ball = new Ball(Vector2(400.0f, 400.0f), Vector2(-1.0f, -1.0f));
+	ball = new Ball(Vector2(500.0f, 500.0f), Vector2(-1.0f, -1.0f));
 	Manager = new BrickManager();
-	paddle = new Paddle(Vector2(500.0f, 500.0f), 60.0, 10.0f);
-	Manager->CreateBricks(nBricksAcross, nBricksDown, brickWidth, brickHeigth);
+	paddle = new Paddle(Vector2(550.0f, 550.0f), 60.0, 10.0f);
+	//Manager->CreateBricks(nBricksAcross, nBricksDown, brickWidth, brickHeigth);
 	walls.left = 0.0f;
 	walls.top = 0.0f;
 	walls.right = width;
@@ -76,12 +76,20 @@ void Game::Update(DX::StepTimer const& timer)
 	{
 		ExitGame();
 	}
+	if (kb.Space && GameOver)
+	{
+		GameOver = false;
+		Manager->RemoveAllBricks();
+		Manager->CreateBricks(nBricksAcross, nBricksDown, brickWidth, brickHeigth);
+	}
 	//paddle inputs
 	paddle->Update(kb, elapsedTime);
 
 	auto mouse = m_mouse->GetState();
-
-	ball->Update(elapsedTime);
+	if (!GameOver)
+	{
+		ball->Update(elapsedTime);
+	}
 	if (ball->DoWallCollision(walls) == 2)
 	{
 		GameOver = true;
@@ -122,7 +130,7 @@ void Game::Render()
 
 	if (GameOver)
 	{
-		output = L"Game Over";
+		output = L"Press Space To Start";
 	}
 
 	m_spriteBatch->Draw(m_background.Get(), m_fullscreenRect);
