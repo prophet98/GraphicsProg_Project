@@ -24,7 +24,7 @@ void BrickManager::CreateBricks(int nBricksAcross, int nBricksDown, int brickWid
 
 			defaultBrickSize.top = y * spawnOffset;
 			defaultBrickSize.bottom += y * spawnOffset;
-			if (y%2 == 0)
+			if (y % 2 == 0)
 			{
 				BrickTile brick = BrickTile(defaultBrickSize, DirectX::Colors::Orange);
 				brickList.push_back(brick);
@@ -41,20 +41,44 @@ void BrickManager::CreateBricks(int nBricksAcross, int nBricksDown, int brickWid
 	}
 }
 
-void BrickManager::UpdateBrickState(std::list<BrickTile>& brickList, Ball& ball, const GeometryBatch& batch)
+void BrickManager::UpdateBrickState(std::vector<BrickTile>& brickList, Ball& ball, const GeometryBatch& batch)
 {
-	for (std::list<BrickTile>::iterator brickElem = brickList.begin(); brickElem != brickList.end(); ++brickElem) {
+	int brickIndex = 0;
+	bool hasCollided = false;
+	float currentCollDist = 0;
+	int curColIndex = 0;
+	for (std::vector<BrickTile>::iterator brickElem = brickList.begin(); brickElem != brickList.end(); ++brickElem) {
+
 		if (!brickElem->isDestroyed)
 		{
 			batch->DrawQuad(brickElem->v1, brickElem->v2, brickElem->v3, brickElem->v4);
 
 		}
-		if (brickElem->DoBallCollision(ball))
+		if (brickElem->CheckBallCollision(ball))
 		{
-
+			const float newCollDistSquared = (ball.GetPosition() - brickElem->GetCenter()).LengthSquared();
+			if (hasCollided)
+			{
+				if (newCollDistSquared < currentCollDist)
+				{
+					currentCollDist = newCollDistSquared;
+					curColIndex = brickIndex;
+				}
+			}
+			else
+			{
+				currentCollDist = newCollDistSquared;
+				curColIndex = brickIndex;
+				hasCollided = true;
+			}
 		}
+		brickIndex++;
 	}
-	
+	if (hasCollided)
+	{
+		brickList[curColIndex].ExecuteBallCollision(ball);
+	}
+
 }
 
 

@@ -37,7 +37,7 @@ void Game::Initialize(HWND window, int width, int height)
 	ball = new Ball(Vector2(400.0f, 400.0f), Vector2(300.0f, 300.0f));
 	Manager = new BrickManager();
 	paddle = new Paddle(Vector2(500.0f, 500.0f), 60.0, 10.0f);
-	Manager->CreateBricks(nBricksAcross, nBricksDown, brickWidth,brickHeigth);
+	Manager->CreateBricks(nBricksAcross, nBricksDown, brickWidth, brickHeigth);
 	walls.left = 0.0f;
 	walls.top = 0.0f;
 	walls.right = width;

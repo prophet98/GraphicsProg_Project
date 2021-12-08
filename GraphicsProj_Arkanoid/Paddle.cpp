@@ -71,3 +71,5 @@ bool Paddle::IsOverlappingWith(const RECT& other)
 	return GetRect().right > other.left && GetRect().left < other.right
 		&& GetRect().bottom > other.top && GetRect().top < other.bottom;
 }
+
+
