@@ -17,7 +17,8 @@ public:
 		v4 = VertexPositionColor(DirectX::SimpleMath::Vector2(_rect.left, _rect.bottom), m_color);
 		isDestroyed = false;
 	}
-	bool DoBallCollision(Ball& ball);
+	void ExecuteBallCollision(Ball& ball);
+	bool CheckBallCollision(Ball& ball);
 
 public:
 	VertexPositionColor v1;
@@ -25,6 +26,7 @@ public:
 	VertexPositionColor v3;
 	VertexPositionColor v4;
 	bool isDestroyed;
+	Vec2 GetCenter() const;
 protected:
 	virtual bool IsOverlappingWith(const RECT& other);
 
