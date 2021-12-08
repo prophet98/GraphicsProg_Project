@@ -97,4 +97,6 @@ private:
 	static constexpr int nBricksAcross = 12;
 	static constexpr int nBricksDown = 4;
 
+	bool GameOver = false;
+
 };

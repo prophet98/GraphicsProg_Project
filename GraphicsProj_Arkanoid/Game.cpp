@@ -82,9 +82,18 @@ void Game::Update(DX::StepTimer const& timer)
 	auto mouse = m_mouse->GetState();
 
 	ball->Update(elapsedTime);
-	ball->DoWallCollision(walls);
-	paddle->DoWallCollision(walls);
-	paddle->DoBallCollision(*ball);
+	if (ball->DoWallCollision(walls) == 2)
+	{
+		GameOver = true;
+	}
+
+	if (!GameOver)
+	{
+		ball->DoWallCollision(walls);
+		paddle->DoWallCollision(walls);
+		paddle->DoBallCollision(*ball);
+	}
+	
 	elapsedTime;
 }
 #pragma endregion
@@ -109,33 +118,44 @@ void Game::Render()
 
 	m_spriteBatch->Begin();
 
-	const wchar_t* output = L"Hello World";
+	const wchar_t* output = L"Level 0-1";
 
+	if (GameOver)
+	{
+		output = L"Game Over";
+	}
 
 	m_spriteBatch->Draw(m_background.Get(), m_fullscreenRect);
-
-	m_spriteBatch->Draw(m_BallTexture.Get(), ball->GetPosition(), nullptr,
-		Colors::White, 0.f, m_origin, .03f);
 
 	Vector2 origin = m_font->MeasureString(output) / 2.f;
 	m_font->DrawString(m_spriteBatch.get(), output,
 		m_fontPos, Colors::White, 0.f, origin);
 
+
+	m_spriteBatch->Draw(m_BallTexture.Get(), ball->GetPosition(), nullptr,
+		Colors::White, 0.f, m_origin, .03f);
+
+
+
 	m_spriteBatch->End();
 
-	context->OMSetBlendState(m_states->Opaque(), nullptr, 0xFFFFFFFF);
-	context->OMSetDepthStencilState(m_states->DepthNone(), 0);
-	context->RSSetState(m_states->CullNone());
+	if (!GameOver)
+	{
+		context->OMSetBlendState(m_states->Opaque(), nullptr, 0xFFFFFFFF);
+		context->OMSetDepthStencilState(m_states->DepthNone(), 0);
+		context->RSSetState(m_states->CullNone());
 
-	m_effect->Apply(context);
+		m_effect->Apply(context);
 
-	context->IASetInputLayout(m_inputLayout.Get());
+		context->IASetInputLayout(m_inputLayout.Get());
 
-	m_batch->Begin();
-	paddle->Draw(m_batch);
-	Manager->UpdateBrickState(Manager->brickList, *ball, m_batch);
+		m_batch->Begin();
+		paddle->Draw(m_batch);
+		Manager->UpdateBrickState(Manager->brickList, *ball, m_batch);
 
-	m_batch->End();
+		m_batch->End();
+	}
+
 
 	context;
 

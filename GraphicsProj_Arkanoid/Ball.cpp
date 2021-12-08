@@ -16,35 +16,35 @@ Vec2 Ball::GetPosition()
 	return pos;
 }
 
-bool Ball::DoWallCollision(const RECT& walls)
+int Ball::DoWallCollision(const RECT& walls)
 {
-	bool collided = false;
+	int collided = 0;
 	const RECT rect = GetRect();
 	if (rect.left < walls.left)
 	{
 		pos.x += walls.left - rect.left;
 		ReboundX();
-		collided = true;
+		collided = 1;
 	}
 	else if (rect.right > walls.right)
 	{
 		pos.x -= rect.right - walls.right;
 		ReboundX();
-		collided = true;
+		collided = 1;
 	}
 	if (rect.top < walls.top)
 	{
 		pos.y += walls.top - rect.top;
 
 		ReboundY();
-		collided = true;
+		collided = 1;
 	}
 	else if (rect.bottom > walls.bottom)
 	{
 		pos.y -= rect.bottom - walls.bottom;
 
 		ReboundY();
-		collided = true;
+		collided = 2;
 	}
 
 	return collided;
