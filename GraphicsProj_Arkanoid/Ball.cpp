@@ -1,8 +1,8 @@
 #include "pch.h"
 #include "Ball.h"
 
-Ball::Ball(const Vec2& _pos, const Vec2& _vel) : pos(_pos), vel(_vel)
-{
+Ball::Ball(const Vec2& _pos, const Vec2& _dir) : pos(_pos){
+	SetDirection(_dir);
 
 }
 
@@ -74,6 +74,13 @@ RECT Ball::GetRect()
 Vec2 Ball::GetVel() const
 {
 	return vel;
+}
+
+void Ball::SetDirection( const Vec2& dir)
+{
+	Vec2 dirCpy = dir;
+	dirCpy.Normalize();
+	vel = dirCpy * ballSpeed;
 }
 
 

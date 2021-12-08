@@ -25,5 +25,7 @@ private:
 	VertexPositionColor v2;
 	VertexPositionColor v3;
 	VertexPositionColor v4;
+
+	float exitXValue = 0.045f;
 };
 
