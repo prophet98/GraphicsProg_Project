@@ -75,8 +75,12 @@ void BrickManager::UpdateBrickState(std::vector<BrickTile>& brickList, Ball& bal
 				hasCollided = true;
 			}
 			destroyedBricks++;
-
+			if (brickSound && !brickSound->IsInUse())
+			{
+				brickSound->Play();
+			}
 		}
+		
 		brickIndex++;
 	}
 	if (hasCollided)
@@ -96,4 +100,14 @@ void BrickManager::RemoveAllBricks()
 }
 
 
+
+BrickManager::BrickManager(std::unique_ptr<DirectX::SoundEffect> in_sound)
+{
+	brickSound = std::move(in_sound);
+}
+
+BrickManager::BrickManager()
+{
+
+}
 

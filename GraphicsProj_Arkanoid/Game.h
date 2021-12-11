@@ -18,7 +18,7 @@ class Game final : public DX::IDeviceNotify
 public:
 
 	Game() noexcept(false);
-	~Game() = default;
+	~Game();
 
 	Game(Game&&) = default;
 	Game& operator= (Game&&) = default;
@@ -46,6 +46,7 @@ public:
 
 	// Properties
 	void GetDefaultSize(int& width, int& height) const noexcept;
+	void OnNewAudioDevice() noexcept { m_retryAudio = true; }
 
 private:
 
@@ -99,4 +100,10 @@ private:
 
 	bool GameOver = false;
 
+	std::unique_ptr<DirectX::AudioEngine> m_audEngine;
+	bool m_retryAudio;
+
+	std::unique_ptr<DirectX::SoundEffect> m_PaddleHitSound;
+	std::unique_ptr<DirectX::SoundEffect> m_GameOverSound;
+	std::unique_ptr<DirectX::SoundEffect> m_BrickExplSound;
 };

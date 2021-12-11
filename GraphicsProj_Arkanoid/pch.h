@@ -6,9 +6,7 @@
 #pragma once
 
 #include <winsdkver.h>
-#ifndef _WIN32_WINNT
-#define _WIN32_WINNT 0x0601
-#endif
+#define _WIN32_WINNT 0x0A00
 #include <sdkddkver.h>
 
 // Use the C++ standard templated min/max
@@ -30,7 +28,7 @@
 
 #define WIN32_LEAN_AND_MEAN
 #include <Windows.h>
-
+#include "Audio.h"
 #include <wrl/client.h>
 
 #include <d3d11_1.h>

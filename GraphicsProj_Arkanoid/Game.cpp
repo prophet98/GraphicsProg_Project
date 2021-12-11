@@ -13,10 +13,19 @@ using namespace DirectX::SimpleMath;
 
 using Microsoft::WRL::ComPtr;
 
-Game::Game() noexcept(false)
+Game::Game() noexcept(false) :
+	m_retryAudio(false)
 {
 	m_deviceResources = std::make_unique<DX::DeviceResources>();
 	m_deviceResources->RegisterDeviceNotify(this);
+}
+
+Game::~Game()
+{
+	if (m_audEngine)
+	{
+		m_audEngine->Suspend();
+	}
 }
 
 // Initialize the Direct3D resources required to run.
@@ -34,8 +43,23 @@ void Game::Initialize(HWND window, int width, int height)
 	m_mouse = std::make_unique<Mouse>();
 	m_mouse->SetWindow(window);
 
+	AUDIO_ENGINE_FLAGS eflags = AudioEngine_Default;
+#ifdef _DEBUG
+	eflags |= AudioEngine_Debug;
+#endif
+	m_audEngine = std::make_unique<AudioEngine>(eflags);
+
+	m_BrickExplSound = std::make_unique<SoundEffect>(m_audEngine.get(),
+		L"BrickExpl.wav");
+	m_GameOverSound = std::make_unique<SoundEffect>(m_audEngine.get(),
+		L"GameOver.wav");
+	m_PaddleHitSound = std::make_unique<SoundEffect>(m_audEngine.get(),
+		L"PaddleHit.wav");
+
+
+
 	ball = new Ball(Vector2(500.0f, 500.0f), Vector2(-1.0f, -1.0f));
-	Manager = new BrickManager();
+	Manager = new BrickManager(std::move(m_BrickExplSound));
 	paddle = new Paddle(Vector2(550.0f, 550.0f), 60.0, 10.0f);
 	//Manager->CreateBricks(nBricksAcross, nBricksDown, brickWidth, brickHeigth);
 	walls.left = 0.0f;
@@ -69,6 +93,22 @@ void Game::Update(DX::StepTimer const& timer)
 {
 	float elapsedTime = float(timer.GetElapsedSeconds());
 
+	if (m_retryAudio)
+	{
+		m_retryAudio = false;
+		if (m_audEngine->Reset())
+		{
+			// TODO: restart any looped sounds here
+		}
+	}
+	else if (!m_audEngine->Update())
+	{
+		if (m_audEngine->IsCriticalError())
+		{
+			m_retryAudio = true;
+		}
+	}
+
 	// TODO: Add your game logic here.
 
 	auto kb = m_keyboard->GetState();
@@ -93,15 +133,23 @@ void Game::Update(DX::StepTimer const& timer)
 	if (ball->DoWallCollision(walls) == 2)
 	{
 		GameOver = true;
+		m_GameOverSound->Play();
 	}
 
 	if (!GameOver)
 	{
 		ball->DoWallCollision(walls);
 		paddle->DoWallCollision(walls);
-		paddle->DoBallCollision(*ball);
+		if (paddle->DoBallCollision(*ball))
+		{
+			if (!m_PaddleHitSound->IsInUse())
+			{
+				m_PaddleHitSound->Play();
+			}
+		}
+
 	}
-	
+
 	elapsedTime;
 }
 #pragma endregion
@@ -207,14 +255,14 @@ void Game::OnDeactivated()
 
 void Game::OnSuspending()
 {
-	// TODO: Game is being power-suspended (or minimized).
+	m_audEngine->Suspend();
 }
 
 void Game::OnResuming()
 {
 	m_timer.ResetElapsedTime();
 
-	// TODO: Game is being power-resumed (or returning from minimize).
+	m_audEngine->Resume();
 }
 
 void Game::OnWindowMoved()

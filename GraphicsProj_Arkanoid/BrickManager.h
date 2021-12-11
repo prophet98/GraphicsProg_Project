@@ -14,6 +14,8 @@ public:
 	void UpdateBrickState(std::vector<BrickTile>& brickList, Ball& ball, const GeometryBatch& batch);
 	void RemoveAllBricks();
 	std::vector<BrickTile> brickList;
-
+	std::unique_ptr<DirectX::SoundEffect> brickSound;
+	BrickManager(std::unique_ptr<DirectX::SoundEffect> in_sound );
+	BrickManager();
 };
 
