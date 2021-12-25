@@ -37,7 +37,9 @@
     <ClInclude Include="Ball.h">
       <Filter>Gameobjects</Filter>
     </ClInclude>
-    <ClInclude Include="Paddle.h" />
+    <ClInclude Include="Paddle.h">
+      <Filter>Gameobjects</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp" />
@@ -58,7 +60,9 @@
     <ClCompile Include="Ball.cpp">
       <Filter>Gameobjects</Filter>
     </ClCompile>
-    <ClCompile Include="Paddle.cpp" />
+    <ClCompile Include="Paddle.cpp">
+      <Filter>Gameobjects</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="resource.rc" />
